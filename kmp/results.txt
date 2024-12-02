@@ -1,0 +1,4 @@
+Benchmarking pattern of length 3 (multiplier 1):
+Benchmarking pattern of length 6 (multiplier 2):
+Benchmarking pattern of length 9 (multiplier 3):
+Benchmarking pattern of length 12 (multiplier 4):
