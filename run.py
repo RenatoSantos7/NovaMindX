@@ -7,6 +7,9 @@ brute_force = "./brute_force"
 
 input_path = "./input"
 output_path = "./output"
+pattern="cag"
+number_of_trials="10"
+pattern_multiplier="1"
 suffix = "results"
 
 # Remove all files in the output directory
@@ -27,7 +30,7 @@ for arg in input_files:
         output_file_brute_force = os.path.join(output_path, f"brute_force_{os.path.splitext(arg)[0]}_{suffix}.txt")
         
         # Execute the dynamic program first
-        subprocess.run([kmp, input_file, output_file_kmp])
+        subprocess.run([kmp, input_file, output_file_kmp, pattern, number_of_trials, pattern_multiplier])
         
         # Execute the static program after the dynamic program completes
-        subprocess.run([brute_force, input_file, output_file_brute_force])
+        subprocess.run([brute_force, input_file, output_file_brute_force, pattern, number_of_trials, pattern_multiplier])

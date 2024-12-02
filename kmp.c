@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,10 +82,22 @@ void longest_repeated_pattern_occurrences(int shifts[], int n, int pattern_lengt
 
 // Benchmark a single execution of the KMP algorithm
 double single_benchmark(const char *text, const char *pattern, int *shifts, int text_size, int pattern_size, int *count) {
-    clock_t start_time = clock();
+    struct timespec start_time, end_time;
+
+    // Start the timer
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
+
+    // Execute the algorithm
     kmp_matcher(text, pattern, text_size, pattern_size, shifts, count);
-    clock_t end_time = clock();
-    return ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+
+    // End the timer
+    clock_gettime(CLOCK_MONOTONIC, &end_time);
+
+    // Calculate the elapsed time in seconds
+    double elapsed_time = (end_time.tv_sec - start_time.tv_sec) +
+                          (end_time.tv_nsec - start_time.tv_nsec) / 1e9;
+
+    return elapsed_time;
 }
 
 void run_benchmark(const char *file_path, const char *pattern, int pattern_size, int multiplier, int k, FILE *results_file) {
@@ -142,8 +155,8 @@ void run_benchmark(const char *file_path, const char *pattern, int pattern_size,
     for (int i = 0; i < k; i++) {
         double execution_time = single_benchmark(text, pattern, shifts, file_size, pattern_size, count);
         longest_repeated_pattern_occurrences(shifts, *count, pattern_size, max_length, max_shift);
-        fprintf(results_file, "%d,%d,%d,%d,%.7f\n", multiplier, i + 1, *max_length, *max_shift, execution_time);
-        printf("Run %d: %.7f seconds\n", i + 1, execution_time); // Optional: print to console
+        fprintf(results_file, "%d,%d,%d,%d,%.9f\n", multiplier, i + 1, *max_length, *max_shift, execution_time);
+        printf("Run %d: %.9f seconds\n", i + 1, execution_time); // Optional: print to console
     }
 
     // Clean up
@@ -174,17 +187,18 @@ char *generate_pattern_multiple(const char *pattern, int pattern_length, int mul
 
 // Main function
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        printf("Usage: %s <input_file_path> <output_file_path>\n", argv[0]);
+    if (argc < 6) {
+        printf("Usage: %s <input_file_path> <output_file_path> <pattern> <number_of_trials> <pattern_multiplier>\n", argv[0]);
         return 1;
     }
 
-    const char *file_path = argv[1];      // Input file path
-    const char *output_file = argv[2];   // Output file path
-    const char *base_pattern = "cag";    // Base pattern
+    const char *file_path = argv[1];          // Input file path
+    const char *output_file = argv[2];       // Output file path
+    const char *base_pattern = argv[3];      // Base pattern
+    int number_of_trials = atoi(argv[4]);    // Number of test runs for each pattern
+    int pattern_multiplier = atoi(argv[5]);  // Maximum multiplier for the pattern
+
     const int base_pattern_length = strlen(base_pattern);
-    int k = 5;                            // Number of test runs for each pattern
-    int L = 4;                            // Maximum multiplier for the pattern
 
     // Open the results file once in write mode
     FILE *results_file = fopen(output_file, "w");
@@ -195,13 +209,13 @@ int main(int argc, char *argv[]) {
 
     fprintf(results_file, "multiplier,run,max_length,shift,time\n");
 
-    for (int multiplier = 1; multiplier <= L; multiplier++) {
+    for (int multiplier = 1; multiplier <= pattern_multiplier; multiplier++) {
         char *current_pattern = generate_pattern_multiple(base_pattern, base_pattern_length, multiplier);
 
         printf("Benchmarking pattern of length %ld (multiplier %d):\n", 
                 strlen(current_pattern), multiplier);
 
-        run_benchmark(file_path, current_pattern, base_pattern_length * multiplier, multiplier, k, results_file);
+        run_benchmark(file_path, current_pattern, base_pattern_length * multiplier, multiplier, number_of_trials, results_file);
 
         free(current_pattern);
     }
