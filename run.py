@@ -8,8 +8,8 @@ brute_force = "./brute_force"
 input_path = "./input"
 output_path = "./output"
 pattern="cag"
-number_of_trials="10"
-pattern_multiplier="1"
+number_of_trials="1000"
+pattern_multiplier="3"
 suffix = "results"
 
 # Remove all files in the output directory
@@ -26,8 +26,8 @@ for arg in input_files:
     input_file = os.path.join(input_path, arg)
     
     if os.path.isfile(input_file):  # Ensure it's a file (not a directory)
-        output_file_kmp = os.path.join(output_path, f"kmp_{os.path.splitext(arg)[0]}_{suffix}.txt")
-        output_file_brute_force = os.path.join(output_path, f"brute_force_{os.path.splitext(arg)[0]}_{suffix}.txt")
+        output_file_kmp = os.path.join(output_path, f"kmp_{os.path.splitext(arg)[0]}.csv")
+        output_file_brute_force = os.path.join(output_path, f"brute_force_{os.path.splitext(arg)[0]}.csv")
         
         # Execute the dynamic program first
         subprocess.run([kmp, input_file, output_file_kmp, pattern, number_of_trials, pattern_multiplier])
