@@ -12,10 +12,10 @@ number_of_trials="1000"
 pattern_multiplier="3"
 suffix = "results"
 
-# Remove all files in the output directory
+# Remove all files in the output directory except .gitkeep
 for file in os.listdir(output_path):
     file_path = os.path.join(output_path, file)
-    if os.path.isfile(file_path):
+    if os.path.isfile(file_path) and file != '.gitkeep':
         os.remove(file_path)
 
 # List all files in the input directory, sorted alphabetically
