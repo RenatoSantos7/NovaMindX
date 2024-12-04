@@ -70,4 +70,4 @@ consolidated_df = consolidated_df.sort_values(by=['data_file', 'multiplier'])
 print(consolidated_df)
 
 # Save the results to file
-consolidated_df.to_csv('sorted_consolidated_results.csv', index=False)
+consolidated_df.to_csv('sorted_consolidated_results.csv', index=False, float_format='%.9f')
