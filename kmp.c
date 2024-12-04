@@ -29,8 +29,9 @@ void compute_prefix_function(const char *P, int m, int *pi) {
 }
 
 void kmp_matcher(const char *T, const char *P, int n, int m, int *shifts, int *count) {
-    int *pi;
-    pi = malloc (m * sizeof(int));
+    // int *pi;
+    // pi = malloc (m * sizeof(int));
+    int pi[m];
 
     compute_prefix_function(P, m, pi);
 
@@ -51,7 +52,7 @@ void kmp_matcher(const char *T, const char *P, int n, int m, int *shifts, int *c
     }
 
     *count = local_count;
-    free(pi);
+    // free(pi);
 }
 
 void longest_repeated_pattern_occurrences(int shifts[], int n, int pattern_length, int *max_length, int *start_shift) {
