@@ -3,6 +3,8 @@ from scipy.stats import ttest_ind
 import os
 import numpy as np
 
+pd.set_option('display.float_format', '{:.9f}'.format)  # Set to 10 decimal places
+
 # Define the folder containing the CSV files
 input_path = 'input'
 output_path = 'output'

@@ -9,7 +9,7 @@ input_path = "./input"
 output_path = "./output"
 pattern="CAG"
 number_of_trials="1000"
-pattern_multiplier="3"
+pattern_multiplier="1"
 suffix = "results"
 
 # Remove all files in the output directory except .gitkeep
