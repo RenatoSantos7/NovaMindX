@@ -7,7 +7,7 @@ brute_force = "./brute_force"
 
 input_path = "./input"
 output_path = "./output"
-pattern="cag"
+pattern="CAG"
 number_of_trials="1000"
 pattern_multiplier="3"
 suffix = "results"

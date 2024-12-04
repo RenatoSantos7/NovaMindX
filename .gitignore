@@ -1,1 +1,5 @@
+kmp
+brute_force
 .venv
+sorted_consolidated_results.csv
+output/*
